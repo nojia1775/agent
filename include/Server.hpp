@@ -4,9 +4,8 @@
 #include <vector>
 #include <stdlib.h>
 #include <random>
-
-class Map {};
-class Agent {};
+#include "Map.hpp"
+#include "Agent.hpp"
 
 class	Server
 {
@@ -16,9 +15,9 @@ class	Server
 		uint8_t			_tick;
 
 	public:
-		Server(Map& map, const size_t& nbrAgents) : _map(map)
-		{
-			std::random_device rd;
-			std::srand(rd());
-		}
+					Server(const std::initializer_list<std::initializer_list<char>>& list);
+					~Server(void);
+					Server(const Server& server) : _map(server._map), _agents(server._agents), _tick(server._tick) {}
+
+		Server&			operator=(const Server& server);
 };

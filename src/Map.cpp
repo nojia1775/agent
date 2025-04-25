@@ -61,12 +61,19 @@ std::vector<std::vector<char>>	Map::getSurrounding(const size_t& x, const size_t
 	if (x > _width - 1 || y > _height - 1)
 		throw OutOfRange();
 	std::vector<std::vector<char>> surrounding(size, std::vector<char>(size));
+	size_t k = 0;
+	size_t l = 0;
 	for (int i = 0 - size ; i < size + 1; i++)
 	{
 		for (int j = 0 - size; j < size + 1; j++)
 		{
-			break;
+			if (x + j > _width - 1 || y + i > _height - 1)
+				surrounding[k][l] = '#';
+			else
+				surrounding[k][l] = _map[y + i][x + j];
+			l++;
 		}
+		k++;
 	}
 }
 
