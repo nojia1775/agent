@@ -20,13 +20,6 @@ int	main(void)
 			{'1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1'},
 		});
 		server.play();
-		std::vector<std::vector<char>> grid = server.getAgent(0)->getSurrounding();
-		for (const auto& line : grid)
-		{
-			for (const auto& c : line)
-				std::cout << c;
-			std::cout << std::endl;
-		}
 	}
 	catch (const std::exception& e) { std::cerr << e.what() << std::endl; }
 	return 0;

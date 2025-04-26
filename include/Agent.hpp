@@ -14,7 +14,6 @@ class	Agent
 		size_t			_x;
 		size_t			_y;
 		size_t			_life;
-		size_t			_stamina;
 		size_t			_view;
 		size_t			_age;
 		size_t			_hunger;
@@ -24,16 +23,15 @@ class	Agent
 		std::vector<char>	_walls;
 
 	public:
-					Agent(void) : _timeDeath(30), _x(0), _y(0), _life(10), _stamina(10), _view(1), _age(0), _hunger(10), _speed(2), _location('0'), _walls({'1', 'O', 'A'}) {}
+					Agent(void) : _timeDeath(30), _x(0), _y(0), _life(10), _view(1), _age(0), _hunger(10), _speed(2), _location('0'), _walls({'1', 'O', 'A'}) {}
 					~Agent(void) {}
 
-					Agent(const size_t& x, const size_t& y) : _timeDeath(30), _x(x), _y(y), _life(10), _stamina(10), _view(1), _age(0), _hunger(10), _speed(2), _location('0'), _walls({'1', 'O', 'A'}) {}
-					Agent(const Agent& agent) : _timeDeath(agent._timeDeath), _x(agent._x), _y(agent._y), _life(agent._life), _stamina(agent._stamina), _view(agent._view), _age(agent._age), _hunger(agent._hunger), _speed(agent._speed), _location(agent._location), _walls(agent._walls) {}
+					Agent(const size_t& x, const size_t& y) : _timeDeath(30), _x(x), _y(y), _life(10), _view(1), _age(0), _hunger(10), _speed(2), _location('0'), _walls({'1', 'O', 'A'}) {}
+					Agent(const Agent& agent) : _timeDeath(agent._timeDeath), _x(agent._x), _y(agent._y), _life(agent._life), _view(agent._view), _age(agent._age), _hunger(agent._hunger), _speed(agent._speed), _location(agent._location), _walls(agent._walls) {}
 
 		const size_t&		getX(void) const { return _x; }
 		const size_t&		getY(void) const { return _y; }
 		const size_t&		getLife(void) const { return _life; }
-		const size_t&		getStamina(void) const { return _stamina; }
 		const size_t& 		getView(void) const { return _view; }
 		const grid&		getSurrounding(void) const { return _surrounding; }
 		const char&		getLocation(void) const { return _location; }

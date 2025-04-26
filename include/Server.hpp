@@ -41,6 +41,7 @@ class	Server
 		void			play(void);
 		void			killAgent(const Agent *agent);
 		void			placeAgentsInMap(void);
+		void			createTree(void);
 
 		class			OutOfRange : public std::exception { const char *what(void) const throw(); };
 };

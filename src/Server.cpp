@@ -63,16 +63,16 @@ void	Server::play(void)
 		display();
 		setAgentsSurrounding();
 		_tick++;
-		for (auto& agent : _agents)
+		for (size_t i = 0 ; i < _agents.size() ; i++)
 		{
-			if (_tick % (10 / agent->getSpeed())== 0)
-				agent->move(_map.getMap());
+			if (_tick % (10 / _agents[i]->getSpeed())== 0)
+				_agents[i]->move(_map.getMap());
 			if (_tick % 10 == 0)
-				agent->addAge();
-			if (agent->getAge() >= agent->getTimeDeath())
+				_agents[i]->addAge();
+			if (_agents[i]->getAge() >= _agents[i]->getTimeDeath())
 			{
-				killAgent(agent);
-				break;
+				killAgent(_agents[i]);
+				i--;
 			}
 		}
 		placeAgentsInMap();
@@ -134,5 +134,17 @@ void	colorfulDisplay(const std::vector<std::vector<char>>& map)
 				std::cout << WHITEB << ' ' << RESET;
 		}
 		std::cout << std::endl;
+	}
+}
+
+void	Server::createTree(void)
+{
+	for (auto& line : _map.getMap())
+	{
+		for (auto& c : line)
+		{
+			if (c == '0')
+				break;
+		}
 	}
 }
