@@ -4,23 +4,23 @@ CXXFLAGS = -Wall -Wextra -Werror -g -MMD
 
 OBJS_DIR = obj
 
-SRCS =	main.cpp
+SRCS =	src/Agent.cpp \
+	src/main.cpp \
+	src/Map.cpp \
+	src/Server.cpp
 
 DEPS = $(OBJS:.o=.d)
 
-
 OBJS = $(SRCS:%.cpp=$(OBJS_DIR)/%.o)
 
-NAME = prog
+NAME = agent
 
 $(NAME): $(OBJS)
 	$(CXX) $(CXXFLAGS) $^ -o $@ -g
 	
 $(OBJS_DIR)/%.o: %.cpp
+	mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-$(OBJS_DIR):
-	mkdir -p $(OBJS_DIR)
 
 all: $(NAME)
 
