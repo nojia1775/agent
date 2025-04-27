@@ -56,6 +56,13 @@ std::vector<char>&	Map::operator[](const size_t& index)
 	return _map[index];
 }
 
+const std::vector<char>&	Map::operator[](const size_t& index) const
+{
+	if (index > _height - 1)
+		throw OutOfRange();
+	return _map[index];
+}
+
 std::vector<std::vector<char>>	Map::getSurrounding(const size_t& x, const size_t& y, const size_t& size) const
 {
 	if (x > _width - 1 || y > _height - 1)

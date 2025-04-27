@@ -69,12 +69,16 @@ void	Server::play(void)
 				_agents[i]->move(_map.getMap());
 			if (_tick % 10 == 0)
 				_agents[i]->addAge();
-			if (_agents[i]->getAge() >= _agents[i]->getTimeDeath())
+			if (_agents[i]->getAge() == _agents[i]->getTimeChild())
+				_agents.push_back(_agents[i]->child(20));
+			if (_agents[i]->isDead())
 			{
 				killAgent(_agents[i]);
 				i--;
 			}
 		}
+		if (_tick % 20 == 0)
+			createTree(30);
 		placeAgentsInMap();
 		usleep(100000);
 	}
@@ -125,26 +129,63 @@ void	colorfulDisplay(const std::vector<std::vector<char>>& map)
 		for (const auto& character : line)
 		{
 			if (character == 'A')
-				std::cout << REDB << ' ' << RESET;
-			else if (character == '1')
 				std::cout << BLACKB << ' ' << RESET;
 			else if (character == 'O')
 				std::cout << BLUEB << ' ' << RESET;
+			else if (character == 'T')
+				std::cout << MAGB << ' ' << RESET;
 			else
-				std::cout << WHITEB << ' ' << RESET;
+				std::cout << GREENB << ' ' << RESET;
 		}
 		std::cout << std::endl;
 	}
 }
 
-void	Server::createTree(void)
+static bool	canGrowTree(const Map& map, const size_t& i, const size_t& j)
 {
-	for (auto& line : _map.getMap())
+	if (i - 1 < map.getHeight() - 1 && j < map.getWidth() - 1)
 	{
-		for (auto& c : line)
+		if (map[i - 1][j] == 'O' || map[i - 1][j] == 'T')
+			return true;
+	}
+	if (i + 1 < map.getHeight() - 1 && j < map.getWidth() - 1)
+	{
+		if (map[i + 1][j] == 'O' || map[i + 1][j] == 'T')
+			return true;
+	}
+	if (i < map.getHeight() - 1 && j - 1 < map.getWidth() - 1)
+	{
+		if (map[i][j - 1] == 'O' || map[i][j - 1] == 'T')
+			return true;
+	}
+	if (i < map.getHeight() - 1 && j + 1 < map.getWidth() - 1)
+	{
+		if (map[i][j + 1] == 'O' || map[i][j + 1] == 'T')
+			return true;
+	}
+	return false;
+}
+
+void	Server::createTree(const int& percent)
+{
+	std::random_device rd;
+	std::srand(rd());
+	for (size_t i = std::rand() % _map.getHeight() ; i < _map.getHeight() ; i++)
+	{
+		for (size_t j = std::rand() % _map.getWidth() ; j < _map.getWidth() ; j++)
 		{
-			if (c == '0')
-				break;
+			if (_map[i][j] == '0')
+			{
+				if (canGrowTree(_map, i, j))
+				{
+					int grow = std::rand() % 100;
+					if (grow < percent)
+					{
+						_map[i][j] = 'T';
+						return;
+					}
+				}
+			}
 		}
 	}
 }

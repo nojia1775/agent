@@ -19,7 +19,7 @@ class	Server
 
 		Map			_map;
 		std::vector<Agent *>	_agents;
-		uint8_t			_tick;
+		size_t			_tick;
 
 	public:
 					Server(const std::initializer_list<std::initializer_list<char>>& list);
@@ -41,7 +41,7 @@ class	Server
 		void			play(void);
 		void			killAgent(const Agent *agent);
 		void			placeAgentsInMap(void);
-		void			createTree(void);
+		void			createTree(const int& percent);
 
 		class			OutOfRange : public std::exception { const char *what(void) const throw(); };
 };
