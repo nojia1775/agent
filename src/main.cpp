@@ -3,6 +3,8 @@
 
 int	main(void)
 {
+	std::random_device rd;
+	std::srand(rd());
 	try
 	{
 		Server server({

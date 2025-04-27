@@ -62,10 +62,11 @@ void	Server::play(void)
 		std::cout << REPLACECURSOR;
 		display();
 		setAgentsSurrounding();
+		colorfulDisplay(_agents[0]->getSurrounding());
 		_tick++;
 		for (size_t i = 0 ; i < _agents.size() ; i++)
 		{
-			if (_tick % (10 / _agents[i]->getSpeed())== 0)
+			if (_tick % (10 / _agents[i]->getSpeed()) == 0)
 				_agents[i]->move(_map.getMap());
 			if (_tick % 10 == 0)
 				_agents[i]->addAge();
@@ -168,8 +169,6 @@ static bool	canGrowTree(const Map& map, const size_t& i, const size_t& j)
 
 void	Server::createTree(const int& percent)
 {
-	std::random_device rd;
-	std::srand(rd());
 	for (size_t i = std::rand() % _map.getHeight() ; i < _map.getHeight() ; i++)
 	{
 		for (size_t j = std::rand() % _map.getWidth() ; j < _map.getWidth() ; j++)

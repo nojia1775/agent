@@ -9,47 +9,61 @@ void	Agent::setSurrounding(const grid& surrounding)
 
 void	Agent::move(grid& map)
 {
-	std::random_device rd;
-	std::srand(rd());
-	int mov = -1;
-	std::vector<std::vector<int>> opts({
-		{0, 0},
-		{1, 0},
-		{0, 1},
-		{-1, 0},
-		{0, -1},
-	});
-	size_t x, y;
-	while (mov == -1)
+	std::vector<size_t> food;
+	try
 	{
-		mov = std::rand() % 5;
-		x = _x + opts[mov][0];
-		y = _y + opts[mov][1];
-		if (x > map[0].size() - 1 || y > map.size() - 1)
-		{
-			mov = -1;
-			continue;
-		}
-		if ((std::find(_walls.begin(), _walls.end(), map[y][x])) != _walls.end())
-			mov = -1;
+		food = getFood();
+		if (_y + food[0] < _y)
+			_y--;
+		else if (_y + food[0] > _y)
+			_y++;
+		if (_x + food[1] < _x)
+			_x--;
+		else if (_x + food[1] > _x)
+			_x++;
 	}
-	if (_x != x || _y != y)
+	catch (...)
 	{
-		_hunger++;
-		if (_location != 'T')
-			map[_y][_x] = _location;
-		_x = x;
-		_y = y;
-		_location = map[_y][_x];
-		if (std::find(_slower.begin(), _slower.end(), _location) != _slower.end())
+		int mov = -1;
+		std::vector<std::vector<int>> opts({
+			{0, 0},
+			{1, 0},
+			{0, 1},
+			{-1, 0},
+			{0, -1},
+		});
+		size_t x, y;
+		while (mov == -1)
 		{
-			_speed = 1;
-			return;
+			mov = std::rand() % 5;
+			x = _x + opts[mov][0];
+			y = _y + opts[mov][1];
+			if (x > map[0].size() - 1 || y > map.size() - 1)
+			{
+				mov = -1;
+				continue;
+			}
+			if ((std::find(_walls.begin(), _walls.end(), map[y][x])) != _walls.end())
+				mov = -1;
 		}
-		else if (_location == 'T')
-			_hunger = 0;
-		else
-			_speed = 2;
+		if (_x != x || _y != y)
+		{
+			_hunger++;
+			if (std::find(_food.begin(), _food.end(), _location) == _food.end())
+				map[_y][_x] = _location;
+			_x = x;
+			_y = y;
+			_location = map[_y][_x];
+			if (std::find(_slower.begin(), _slower.end(), _location) != _slower.end())
+			{
+				_speed = 1;
+				return;
+			}
+			else if (_location == 'T')
+				_hunger = 0;
+			else
+				_speed = 2;
+		}
 	}
 }
 
@@ -57,8 +71,6 @@ Agent	*Agent::child(const size_t& mutation)
 {
 	_age++;
 	Agent *child = new Agent(*this);
-	std::random_device rd;
-	std::srand(rd());
 	if (std::rand() % 100 >= (int)mutation)
 		return child;
 	int where = std::rand() % 5;
@@ -88,4 +100,20 @@ Agent	*Agent::child(const size_t& mutation)
 			break;
 	}
 	return child;
+}
+
+std::vector<size_t>	Agent::getFood(void) const
+{
+	size_t i = 0;
+	size_t j = 0;
+	for ( ; i < _view * 2 + 1 ; i++)
+	{
+		j = 0;
+		for ( ; j < _view * 2 + 1; j++)
+		{
+			if (std::find(_food.begin(), _food.end(), _surrounding[i][j]) != _food.end())
+				return {i - _view, j - _view};
+		}
+	}
+	throw NoFood();
 }
