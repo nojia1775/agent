@@ -71,7 +71,10 @@ void	Server::play(void)
 			if (_tick % 10 == 0)
 				_agents[i]->addAge();
 			if (_agents[i]->getAge() == _agents[i]->getTimeChild())
+			{
 				_agents.push_back(_agents[i]->child(20));
+				setAgentsSurrounding();
+			}
 			if (_agents[i]->isDead())
 			{
 				killAgent(_agents[i]);

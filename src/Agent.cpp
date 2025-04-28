@@ -13,14 +13,18 @@ void	Agent::move(grid& map)
 	try
 	{
 		food = getFood();
+		_hunger++;
+		if (std::find(_food.begin(), _food.end(), _location) == _food.end())
+			map[_y][_x] = _location;
 		if (_y + food[0] < _y)
 			_y--;
 		else if (_y + food[0] > _y)
 			_y++;
-		if (_x + food[1] < _x)
+		else if (_x + food[1] < _x)
 			_x--;
 		else if (_x + food[1] > _x)
 			_x++;
+		_location = map[_y][_x];
 	}
 	catch (...)
 	{
@@ -106,14 +110,18 @@ std::vector<size_t>	Agent::getFood(void) const
 {
 	size_t i = 0;
 	size_t j = 0;
+	std::vector<size_t> coor({100, 100});
 	for ( ; i < _view * 2 + 1 ; i++)
 	{
 		j = 0;
 		for ( ; j < _view * 2 + 1; j++)
 		{
-			if (std::find(_food.begin(), _food.end(), _surrounding[i][j]) != _food.end())
-				return {i - _view, j - _view};
+			if (std::find(_food.begin(), _food.end(), _surrounding[i][j]) != _food.end()
+			&& sqrt(pow(i - _view, 2) + pow(j - _view, 2)) < sqrt(pow(coor[0], 2) + pow(coor[1], 2)))
+				coor = {i - _view, j - _view};
 		}
 	}
-	throw NoFood();
+	if (coor[0] == 100 && coor[1] == 100)
+		throw NoFood();
+	return coor;
 }
